@@ -428,6 +428,7 @@
             color: var(--body-color-muted);
         }
         
+        /* Blinking Live Status */
         .app-status {
             display: inline-flex;
             align-items: center;
@@ -443,6 +444,7 @@
             background-color: rgba(40, 167, 69, 0.15);
             color: #28a745;
             border-color: rgba(40, 167, 69, 0.3);
+            animation: blink-green 2s infinite;
         }
         
         .status-maintenance {
@@ -615,6 +617,49 @@
             top: 60%;
             left: 70%;
         }
+        
+        /* Blinking Animation for Live Status */
+        @keyframes blink-green {
+            0%, 100% { 
+                background-color: rgba(40, 167, 69, 0.15);
+                box-shadow: 0 0 5px rgba(40, 167, 69, 0.5);
+            }
+            50% { 
+                background-color: rgba(40, 167, 69, 0.3);
+                box-shadow: 0 0 15px rgba(40, 167, 69, 0.8);
+            }
+        }
+        
+        @keyframes blink-dot {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.5;
+                transform: scale(1.1);
+            }
+        }
+        
+        /* Live Visitors Card Special Effects */
+        @keyframes blink-red {
+            0%, 100% { 
+                opacity: 1;
+                text-shadow: 0 0 5px rgba(255, 71, 87, 0.5);
+            }
+            50% { 
+                opacity: 0.7;
+                text-shadow: 0 0 15px rgba(255, 71, 87, 0.8);
+            }
+        }
+        
+        .live-visitors-card .stat-number {
+            animation: blink-red 2s infinite;
+        }
+        
+        .status-running i.fa-circle {
+            animation: blink-dot 1.5s infinite;
+        }
     </style>
 </head>
 <body>
@@ -649,7 +694,7 @@
                 <div class="stat-icon">
                     <i class="fas fa-server"></i>
                 </div>
-                <div class="stat-number" id="totalApps">12</div>
+                <div class="stat-number" id="totalApps">2</div>
                 <div class="stat-label">Total Applications</div>
             </div>
             <div class="stat-card">
@@ -659,12 +704,12 @@
                 <div class="stat-number">2</div>
                 <div class="stat-label">Running</div>
             </div>
-            <div class="stat-card">
+            <div class="stat-card live-visitors-card">
                 <div class="stat-icon">
                     <i class="fas fa-users"></i>
                 </div>
-                <div class="stat-number">247</div>
-                <div class="stat-label">Active Users</div>
+                <div class="stat-number" id="liveUsers">1</div>
+                <div class="stat-label">Live Visitors</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">
@@ -734,9 +779,8 @@
                 status: "running",
                 statusText: "Live",
                 url: "https://todo-django-htjt.onrender.com/todos/",
-                icon: "fas fa-chart-line",
+                icon: "fas fa-tasks",
                 lastUpdated: "2 hours ago"
-               
             },
             {
                 id: 2,
@@ -746,10 +790,9 @@
                 status: "running",
                 statusText: "Live",
                 url: "https://wisecow.onrender.com/",
-                icon: "fas fa-user-circle",
+                icon: "fas fa-cow",
                 lastUpdated: "2 hours ago"
             }
-            
         ];
 
         // DOM elements
@@ -821,19 +864,11 @@
                                 <i class="far fa-clock"></i>
                                 <span>Updated ${app.lastUpdated}</span>
                             </div>
-                            <div class="app-meta-item">
-                                <i class="fas fa-users"></i>
-                                <span>${app.users} users</span>
-                            </div>
                         </div>
                         <div class="app-meta">
                             <span class="app-status ${statusClass}">
                                 <i class="fas fa-circle"></i> ${app.statusText}
                             </span>
-                            <div class="app-meta-item">
-                                <i class="fas fa-signal"></i>
-                                <span>${app.uptime} uptime</span>
-                            </div>
                         </div>
                         <a href="${app.url}" target="_blank" class="app-link">
                             <i class="fas fa-external-link-alt"></i> Open Application
@@ -867,6 +902,88 @@
 
         // Initial render
         renderApps();
+        
+        // ========== LIVE VISITOR COUNTER ==========
+        let visitorCount = 0;
+        const liveUsersElement = document.getElementById('liveUsers');
+        
+        // Generate visitor ID
+        function getVisitorId() {
+            let visitorId = localStorage.getItem('visitor_id');
+            if (!visitorId) {
+                visitorId = 'visitor_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                localStorage.setItem('visitor_id', visitorId);
+                visitorCount++;
+                updateCounter();
+            }
+            return visitorId;
+        }
+
+        // Update counter
+        function updateCounter() {
+            // Start with base count from localStorage or start at 1
+            let storedCount = localStorage.getItem('total_visitors');
+            let baseCount = storedCount ? parseInt(storedCount) : 0;
+            
+            // Simulate live traffic: random fluctuation between -2 to +3
+            const fluctuation = Math.floor(Math.random() * 6) - 2;
+            let count = Math.max(1, baseCount + fluctuation + visitorCount);
+            
+            // Update counter
+            const currentCount = parseInt(liveUsersElement.textContent) || 0;
+            
+            if (currentCount !== count) {
+                // Animate the counter
+                let start = currentCount;
+                const end = count;
+                const duration = 800;
+                const stepTime = 50;
+                const steps = duration / stepTime;
+                const increment = (end - start) / steps;
+                
+                let currentStep = 0;
+                const timer = setInterval(() => {
+                    currentStep++;
+                    start += increment;
+                    liveUsersElement.textContent = Math.round(start);
+                    
+                    if (currentStep >= steps) {
+                        clearInterval(timer);
+                        liveUsersElement.textContent = end;
+                        
+                        // Store updated count
+                        localStorage.setItem('total_visitors', end.toString());
+                    }
+                }, stepTime);
+            }
+        }
+
+        // Initialize visitor tracking
+        getVisitorId();
+
+        // Initial counter update
+        updateCounter();
+        
+        // Update counter every 20-40 seconds (random interval)
+        function scheduleNextUpdate() {
+            const interval = Math.floor(Math.random() * 20000) + 20000; // 20-40 seconds
+            setTimeout(() => {
+                updateCounter();
+                scheduleNextUpdate();
+            }, interval);
+        }
+        
+        scheduleNextUpdate();
+        
+        // Get visitor IP (for logging)
+        fetch('https://api.ipify.org?format=json')
+            .then(r => r.json())
+            .then(data => {
+                console.log('Visitor IP:', data.ip);
+            })
+            .catch(() => {
+                console.log('IP detection failed');
+            });
         
         // Add a subtle loading animation for initial load
         document.addEventListener('DOMContentLoaded', function() {
