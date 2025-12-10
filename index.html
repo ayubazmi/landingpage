@@ -574,27 +574,35 @@
             to { transform: rotate(360deg); }
         }
         
-        /* Resume Link in Header */
+        /* Red Blinking Resume Button in Header */
         .resume-link {
-            background: var(--accent-gradient);
-            border: 1px solid var(--shape-border-color);
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: var(--button-border-radius);
-            padding: 0.75rem 1.5rem;
+            padding: 0.85rem 1.75rem;
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
             color: white;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 1rem;
             transition: all 0.3s ease;
-            box-shadow: var(--clickable-shadow);
-            animation: blink-resume 2s infinite;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+            animation: blink-red-resume 1.5s infinite;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .resume-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-            background: var(--accent-gradient-fill);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 71, 87, 0.6);
+            background: linear-gradient(135deg, #ff3838, #ff1e1e);
+        }
+        
+        .resume-link i {
+            font-size: 1.1rem;
+            animation: blink-red-icon 1s infinite;
         }
         
         /* Gradient Orbs */
@@ -642,14 +650,26 @@
             }
         }
         
-        @keyframes blink-resume {
+        /* Red Blinking Animation for Resume Button */
+        @keyframes blink-red-resume {
             0%, 100% { 
-                box-shadow: 0 0 10px rgba(158, 137, 220, 0.5);
+                box-shadow: 0 4px 20px rgba(255, 71, 87, 0.5);
                 transform: scale(1);
             }
             50% { 
-                box-shadow: 0 0 20px rgba(158, 137, 220, 0.8);
-                transform: scale(1.02);
+                box-shadow: 0 4px 30px rgba(255, 71, 87, 0.8), 0 0 20px rgba(255, 71, 87, 0.6);
+                transform: scale(1.03);
+            }
+        }
+        
+        @keyframes blink-red-icon {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: scale(1.1);
             }
         }
         
@@ -707,7 +727,7 @@
                    target="_blank" 
                    class="resume-link">
                     <i class="fas fa-file-alt"></i>
-                    <span>Resume</span>
+                    <span>RESUME</span>
                 </a>
             </div>
         </div>
