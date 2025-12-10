@@ -105,12 +105,38 @@
             font-weight: var(--body-font-weight);
             letter-spacing: var(--letter-spacing-body);
             line-height: var(--line-height-body);
-            color: var(--body-color);
-            background-color: var(--card-color);
+            color: var(--shape-text-color);
+            background: var(--accent-gradient-background);
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(46, 26, 102, 0.15) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(46, 26, 102, 0.1) 0%, transparent 20%);
+            position: relative;
+        }
+        
+        /* Background gradient layers */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--shape-bg-color-alpha) 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, var(--shape-bg-color-alpha-dim) 0%, transparent 30%),
+                radial-gradient(circle at 40% 80%, var(--shape-bg-color-alpha-light) 0%, transparent 25%);
+            z-index: -2;
+        }
+        
+        /* Noise texture overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            opacity: 0.15;
+            z-index: -1;
         }
         
         h1, h2, h3, h4, h5, h6 {
@@ -129,14 +155,16 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--container-padding);
+            position: relative;
+            z-index: 1;
         }
         
         /* Header Styles */
         header {
-            background-color: var(--card-background-color);
+            background-color: var(--shape-bg-color-alpha);
             backdrop-filter: var(--card-backdrop-filter);
-            border-bottom: var(--card-border);
-            box-shadow: var(--card-border-shadow);
+            border-bottom: 1px solid var(--shape-border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
             padding: 1.5rem 0;
             position: sticky;
             top: 0;
@@ -186,10 +214,10 @@
         }
         
         .stat-card {
-            background-color: var(--card-background-color);
+            background-color: var(--shape-bg-color-alpha);
             backdrop-filter: var(--card-backdrop-filter);
-            border: var(--card-border);
-            box-shadow: var(--card-border-shadow);
+            border: 1px solid var(--shape-border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             padding: 1.5rem;
             border-radius: var(--box-border-radius);
             transition: all 0.3s ease;
@@ -197,13 +225,16 @@
         
         .stat-card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+            border-color: var(--accent-color-readable);
+            background-color: var(--shape-bg-color-alpha-dim);
         }
         
         .stat-icon {
             width: 48px;
             height: 48px;
             background: var(--accent-gradient-background);
+            border: 1px solid var(--shape-border-color);
             border-radius: var(--button-border-radius);
             display: flex;
             align-items: center;
@@ -260,18 +291,19 @@
         
         .filter-btn {
             padding: 0.65rem 1.5rem;
-            background-color: var(--clickable-background-color);
-            border: var(--card-border);
+            background-color: var(--shape-bg-color-alpha-light);
+            border: 1px solid var(--shape-border-color);
             border-radius: var(--button-border-radius);
-            color: var(--body-color);
+            color: var(--shape-text-color);
             font-weight: 600;
             cursor: pointer;
             transition: all 0.2s ease;
         }
         
         .filter-btn:hover {
-            background-color: var(--neutral-background-color);
+            background-color: var(--shape-bg-color-alpha);
             border-color: var(--accent-color-readable);
+            transform: translateY(-2px);
         }
         
         .filter-btn.active {
@@ -291,10 +323,10 @@
         .search-box {
             width: 100%;
             padding: 0.9rem 1.25rem 0.9rem 3rem;
-            background-color: var(--neutral-background-color);
-            border: var(--card-border);
+            background-color: var(--shape-bg-color-alpha);
+            border: 1px solid var(--shape-border-color);
             border-radius: var(--button-border-radius);
-            color: var(--body-color);
+            color: var(--shape-text-color);
             font-size: 1rem;
             transition: all 0.2s ease;
         }
@@ -302,7 +334,8 @@
         .search-box:focus {
             outline: none;
             border-color: var(--accent-color-readable);
-            box-shadow: 0 0 0 2px rgba(158, 137, 220, 0.2);
+            box-shadow: 0 0 0 3px rgba(158, 137, 220, 0.2);
+            background-color: var(--shape-bg-color-alpha-dim);
         }
         
         .search-icon {
@@ -322,10 +355,10 @@
         }
         
         .app-card {
-            background-color: var(--card-background-color);
+            background-color: var(--shape-bg-color-alpha);
             backdrop-filter: var(--card-backdrop-filter);
-            border: var(--card-border);
-            box-shadow: var(--card-border-shadow);
+            border: 1px solid var(--shape-border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             border-radius: var(--box-border-radius);
             overflow: hidden;
             transition: all 0.3s ease;
@@ -335,13 +368,15 @@
         
         .app-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             border-color: var(--accent-color-readable);
+            background-color: var(--shape-bg-color-alpha-dim);
         }
         
         .app-header {
             padding: var(--card-padding);
-            background: var(--accent-gradient-background);
+            background: var(--shape-bg-color);
+            border-bottom: 1px solid var(--shape-border-color);
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -401,18 +436,19 @@
             border-radius: 20px;
             font-weight: 600;
             font-size: 0.8rem;
-            background-color: rgba(40, 167, 69, 0.1);
-            color: #28a745;
+            border: 1px solid;
         }
         
         .status-running {
             background-color: rgba(40, 167, 69, 0.15);
             color: #28a745;
+            border-color: rgba(40, 167, 69, 0.3);
         }
         
-        .status-warning {
+        .status-maintenance {
             background-color: rgba(255, 193, 7, 0.15);
             color: #ffc107;
+            border-color: rgba(255, 193, 7, 0.3);
         }
         
         .app-link {
@@ -427,19 +463,20 @@
             transition: all 0.3s ease;
             box-shadow: var(--clickable-shadow);
             margin-top: auto;
+            border: none;
         }
         
         .app-link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
             background: var(--accent-gradient-fill);
         }
         
         /* Footer */
         footer {
-            background-color: var(--card-background-color);
+            background-color: var(--shape-bg-color-alpha);
             backdrop-filter: var(--card-backdrop-filter);
-            border-top: var(--card-border);
+            border-top: 1px solid var(--shape-border-color);
             padding: 2.5rem 0;
             margin-top: 3rem;
         }
@@ -509,6 +546,9 @@
             text-align: center;
             padding: 4rem 2rem;
             color: var(--body-color-muted);
+            background-color: var(--shape-bg-color-alpha-light);
+            border-radius: var(--box-border-radius);
+            border: 1px solid var(--shape-border-color);
         }
         
         .empty-state i {
@@ -532,31 +572,56 @@
             to { transform: rotate(360deg); }
         }
         
-        /* Gradient accents */
-        .gradient-accent {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(158, 137, 220, 0.15) 0%, transparent 70%);
-            z-index: -1;
-            pointer-events: none;
+        /* System Status Banner */
+        .system-status {
+            background: var(--shape-bg-color-alpha);
+            border: 1px solid var(--shape-border-color);
+            border-radius: var(--box-border-radius);
+            padding: 0.75rem 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
         }
         
-        .accent-1 {
+        /* Gradient Orbs */
+        .gradient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+        
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, var(--shape-bg-color-alpha) 0%, transparent 70%);
             top: 10%;
             left: 5%;
         }
         
-        .accent-2 {
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--shape-bg-color-alpha-dim) 0%, transparent 70%);
             bottom: 10%;
             right: 5%;
+        }
+        
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, var(--shape-bg-color-alpha-light) 0%, transparent 70%);
+            top: 60%;
+            left: 70%;
         }
     </style>
 </head>
 <body>
-    <div class="gradient-accent accent-1"></div>
-    <div class="gradient-accent accent-2"></div>
+    <!-- Background gradient orbs -->
+    <div class="gradient-orb orb-1"></div>
+    <div class="gradient-orb orb-2"></div>
+    <div class="gradient-orb orb-3"></div>
     
     <header>
         <div class="container">
@@ -570,11 +635,9 @@
                         <p>Access all running applications from a single dashboard</p>
                     </div>
                 </div>
-                <div class="header-actions">
-                    <div class="app-status status-running">
-                        <i class="fas fa-circle"></i>
-                        <span>All Systems Operational</span>
-                    </div>
+                <div class="system-status status-running">
+                    <i class="fas fa-circle"></i>
+                    <span>All Systems Operational</span>
                 </div>
             </div>
         </div>
@@ -874,7 +937,7 @@
                 
                 // Determine status class
                 let statusClass = 'status-running';
-                if (app.status === 'maintenance') statusClass = 'status-warning';
+                if (app.status === 'maintenance') statusClass = 'status-maintenance';
                 
                 appCard.innerHTML = `
                     <div class="app-header">
