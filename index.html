@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Applications Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Petrona:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            /* Color variables from provided CSS */
+            --grid-outline-color: var(--chakra-colors-gray-600);
+            --card-background-color: #1f1f1ebf;
+            --card-border-color: rgba(230, 230, 230, 0.25);
+            --card-backdrop-filter: blur(20px) saturate(170%);
+            --card-border: 0.0625em solid var(--card-border-color);
+            --card-border-width: 0.0625em;
+            --card-border-radius: 0;
+            --card-shadow-distance: 0.4em;
+            --card-border-shadow: 0 0 0 0.0625em rgba(230, 230, 230, 0.25);
+            --card-shadow: 0 0 0 0.0625em rgba(230, 230, 230, 0.25);
+            --clickable-background-color: #52525199;
+            --box-border-radius: 0.35em;
+            --shape-border-width: 0.0625em;
+            --line-thickness: max(round(0.125em, 1px), 1px);
+            --button-border-radius: 0.375em;
+            --shape-bg-image: var(--accent-gradient-background);
+            --shape-bg-color-alpha: #2f1d63ff;
+            --shape-bg-color-alpha-dim: #35206fff;
+            --shape-bg-color-alpha-light: #291a57ff;
+            --shape-bg-color: #2f1d63ff;
+            --shape-border-color: #48367cff;
+            --shape-text-color: #E0D6DE;
+            --line-color: #48367cff;
+            --shape-bg-image-svg: url(#theme-accent-background-gradient-linear);
+            --shape-bg-image-svg-rtl: url(#theme-accent-background-gradient-linear-rtl);
+            --shape-fill: var(--accent-gradient-fill, var(--accent-color));
+            --shape-fill-opacity: 1;
+            --shape-fill-svg: url(#theme-accent-gradient-linear) var(--accent-color);
+            --shape-fill-svg-rtl: url(#theme-accent-gradient-linear-rtl) var(--accent-color);
+            --shape-fill-svg-dim: var(--accent-color-dim);
+            --shape-fill-svg-light: var(--accent-color-light);
+            --shape-fill-text-color: #fff;
+            --accent-color-dim: #a085edff;
+            --accent-color-light: #6d52baff;
+            --shape-shadow: none;
+            --clickable-shadow: 0 0.25em 0.375em -0.0625em rgba(0, 0, 0, 0.1), 0 0.125em 0.25em -0.0625em rgba(0, 0, 0, 0.06);
+            --body-font: "Inter";
+            --heading-font: "Petrona";
+            --heading-font-weight: 700;
+            --body-font-weight: 400;
+            --letter-spacing-body: -0.02em;
+            --letter-spacing-heading: -0.02em;
+            --line-height-body: 1.6;
+            --line-height-heading: 1.25;
+            --accent-color: #876cd4ff;
+            --accent-color-readable: #9d87dcff;
+            --accent-gradient: linear-gradient(6deg, #9A81DF 10%, #a08cd9ff 90%);
+            --accent-gradient-fill: linear-gradient(6deg, #9A81DF 10%, #7456C8 90%);
+            --accent-gradient-background: linear-gradient(6deg, #2e1a66ff 10%, #301f60ff 90%);
+            --accent-color-background-muted: #1c113bff;
+            --expandable-hover-background: #9e89dc1a;
+            --neutral-border-color: var(--chakra-colors-whiteAlpha-400);
+            --neutral-background-color: #2c2c2bff;
+            --button-color: #9d87dcff;
+            --button-gradient: linear-gradient(6deg, #9A81DF 10%, #a08cd9ff 90%);
+            --button-color-inverted: #000;
+            --link-color: #9e89dcff;
+            --link-color-hover: #7e62d0ff;
+            --link-box-shadow: 0 0 0px 3px #9e89dcff;
+            --body-color: #E0D6DE;
+            --body-color-muted: #e0d6de80;
+            --body-color-inverted: #000;
+            --link-color-inverted: #000;
+            --highlight-color-dark: var(--body-color);
+            --highlight-color-light: var(--body-color-inverted);
+            --highlight-link-color-hover-dark: #cab9c7ff;
+            --highlight-link-color-hover-light: #1a1a1aff;
+            --heading-color: #ff8aafff;
+            --heading-gradient: linear-gradient(135deg, #A680FF 5%, #FF85B8 45%, #FFB070 85%);
+            --card-color: #1F1F1E;
+            --card-color-mask: #1f1f1ecc;
+            --placeholder-button-bg-color: var(--chakra-colors-gray-700);
+            --placeholder-button-bg-hover-color: var(--chakra-colors-gray-600);
+            --placeholder-button-text-color: var(--chakra-colors-gray-300);
+            --placeholder-button-text-hover-color: var(--chakra-colors-gray-200);
+            
+            /* Additional variables for layout */
+            --container-padding: 2rem;
+            --card-padding: 1.75rem;
+            --app-card-spacing: 1.5rem;
+            --header-height: 80px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--body-font), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-weight: var(--body-font-weight);
+            letter-spacing: var(--letter-spacing-body);
+            line-height: var(--line-height-body);
+            color: var(--body-color);
+            background-color: var(--card-color);
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(46, 26, 102, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(46, 26, 102, 0.1) 0%, transparent 20%);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--heading-font), Georgia, serif;
+            font-weight: var(--heading-font-weight);
+            letter-spacing: var(--letter-spacing-heading);
+            line-height: var(--line-height-heading);
+            color: var(--heading-color);
+            background: var(--heading-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+        
+        /* Header Styles */
+        header {
+            background-color: var(--card-background-color);
+            backdrop-filter: var(--card-backdrop-filter);
+            border-bottom: var(--card-border);
+            box-shadow: var(--card-border-shadow);
+            padding: 1.5rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--accent-gradient);
+            border-radius: 0.35em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+        }
+        
+        .logo-text h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .logo-text p {
+            color: var(--body-color-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* Stats Section */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+            margin: 2.5rem 0;
+        }
+        
+        .stat-card {
+            background-color: var(--card-background-color);
+            backdrop-filter: var(--card-backdrop-filter);
+            border: var(--card-border);
+            box-shadow: var(--card-border-shadow);
+            padding: 1.5rem;
+            border-radius: var(--box-border-radius);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-gradient-background);
+            border-radius: var(--button-border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--accent-color-readable);
+            font-size: 1.25rem;
+        }
+        
+        .stat-number {
+            font-size: 2.25rem;
+            font-weight: 700;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            color: var(--body-color-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Filter Controls */
+        .filter-section {
+            margin-bottom: 2rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-title i {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .filter-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .filter-btn {
+            padding: 0.65rem 1.5rem;
+            background-color: var(--clickable-background-color);
+            border: var(--card-border);
+            border-radius: var(--button-border-radius);
+            color: var(--body-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .filter-btn:hover {
+            background-color: var(--neutral-background-color);
+            border-color: var(--accent-color-readable);
+        }
+        
+        .filter-btn.active {
+            background: var(--accent-gradient);
+            color: white;
+            border-color: transparent;
+            box-shadow: var(--clickable-shadow);
+        }
+        
+        /* Search Box */
+        .search-container {
+            position: relative;
+            max-width: 500px;
+            margin-bottom: 2rem;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 0.9rem 1.25rem 0.9rem 3rem;
+            background-color: var(--neutral-background-color);
+            border: var(--card-border);
+            border-radius: var(--button-border-radius);
+            color: var(--body-color);
+            font-size: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent-color-readable);
+            box-shadow: 0 0 0 2px rgba(158, 137, 220, 0.2);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--body-color-muted);
+        }
+        
+        /* Apps Grid */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--app-card-spacing);
+            margin-bottom: 3rem;
+        }
+        
+        .app-card {
+            background-color: var(--card-background-color);
+            backdrop-filter: var(--card-backdrop-filter);
+            border: var(--card-border);
+            box-shadow: var(--card-border-shadow);
+            border-radius: var(--box-border-radius);
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .app-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-color-readable);
+        }
+        
+        .app-header {
+            padding: var(--card-padding);
+            background: var(--accent-gradient-background);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .app-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--accent-gradient);
+            border-radius: var(--box-border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.35rem;
+        }
+        
+        .app-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--shape-text-color);
+        }
+        
+        .app-content {
+            padding: var(--card-padding);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .app-description {
+            color: var(--body-color-muted);
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            flex-grow: 1;
+        }
+        
+        .app-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .app-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--body-color-muted);
+        }
+        
+        .app-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+        
+        .status-running {
+            background-color: rgba(40, 167, 69, 0.15);
+            color: #28a745;
+        }
+        
+        .status-warning {
+            background-color: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+        }
+        
+        .app-link {
+            display: block;
+            text-align: center;
+            background: var(--accent-gradient);
+            color: white;
+            padding: 0.9rem;
+            border-radius: var(--button-border-radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--clickable-shadow);
+            margin-top: auto;
+        }
+        
+        .app-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            background: var(--accent-gradient-fill);
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--card-background-color);
+            backdrop-filter: var(--card-backdrop-filter);
+            border-top: var(--card-border);
+            padding: 2.5rem 0;
+            margin-top: 3rem;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+        
+        .copyright {
+            color: var(--body-color-muted);
+            font-size: 0.9rem;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .footer-link {
+            color: var(--link-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        
+        .footer-link:hover {
+            color: var(--link-color-hover);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .apps-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-controls {
+                justify-content: center;
+            }
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--body-color-muted);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Gradient accents */
+        .gradient-accent {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(158, 137, 220, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+        
+        .accent-1 {
+            top: 10%;
+            left: 5%;
+        }
+        
+        .accent-2 {
+            bottom: 10%;
+            right: 5%;
+        }
+    </style>
+</head>
+<body>
+    <div class="gradient-accent accent-1"></div>
+    <div class="gradient-accent accent-2"></div>
+    
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Applications Dashboard</h1>
+                        <p>Access all running applications from a single dashboard</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <div class="app-status status-running">
+                        <i class="fas fa-circle"></i>
+                        <span>All Systems Operational</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="stats">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-server"></i>
+                </div>
+                <div class="stat-number" id="totalApps">12</div>
+                <div class="stat-label">Total Applications</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-play-circle"></i>
+                </div>
+                <div class="stat-number">10</div>
+                <div class="stat-label">Running</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-number">247</div>
+                <div class="stat-label">Active Users</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-number">99.2%</div>
+                <div class="stat-label">Uptime</div>
+            </div>
+        </section>
+        
+        <section class="filter-section">
+            <h2 class="section-title">
+                <i class="fas fa-th-large"></i>
+                Live Applications
+            </h2>
+            
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchInput" placeholder="Search applications...">
+                <div class="search-icon">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            
+            <div class="filter-controls">
+                <button class="filter-btn active" data-filter="all">All Applications</button>
+                <button class="filter-btn" data-filter="production">Production</button>
+                <button class="filter-btn" data-filter="development">Development</button>
+                <button class="filter-btn" data-filter="running">Running</button>
+                <button class="filter-btn" data-filter="maintenance">Maintenance</button>
+            </div>
+            
+            <div class="apps-grid" id="appsContainer">
+                <!-- App cards will be dynamically generated here -->
+            </div>
+            
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h3>No applications found</h3>
+                <p>Try adjusting your search or filter criteria</p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="copyright">
+                    &copy; 2023 Applications Dashboard. All rights reserved.
+                </div>
+                <div class="footer-links">
+                    <a href="#" class="footer-link"><i class="fas fa-question-circle"></i> Documentation</a>
+                    <a href="#" class="footer-link"><i class="fas fa-envelope"></i> Support</a>
+                    <a href="#" class="footer-link"><i class="fas fa-shield-alt"></i> Security</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Application data
+        const apps = [
+            {
+                id: 1,
+                name: "Todo App",
+                description: "Real-time analytics and visualization platform for monitoring user engagement and business metrics.",
+                category: "production",
+                status: "running",
+                statusText: "Live",
+                url: "https://todo-django-htjt.onrender.com/todos/",
+                icon: "fas fa-chart-line",
+                lastUpdated: "2 hours ago",
+                users: "1.2k",
+                uptime: "99.9%"
+            },
+            {
+                id: 2,
+                name: "Wisecow App",
+                description: "Client-facing portal for account management, billing, and support ticket submission.",
+                category: "production",
+                status: "running",
+                statusText: "Live",
+                url: "https://wisecow.onrender.com/",
+                icon: "fas fa-user-circle",
+                lastUpdated: "1 day ago",
+                users: "3.5k",
+                uptime: "99.8%"
+            },
+            {
+                id: 3,
+                name: "Admin Console",
+                description: "Internal administrative interface for system configuration and user management.",
+                category: "production",
+                status: "running",
+                statusText: "Live",
+                url: "https://admin.example.com",
+                icon: "fas fa-cogs",
+                lastUpdated: "5 minutes ago",
+                users: "45",
+                uptime: "100%"
+            },
+            {
+                id: 4,
+                name: "E-commerce Platform",
+                description: "Online shopping platform with product catalog, cart, and checkout functionality.",
+                category: "production",
+                status: "running",
+                statusText: "Live",
+                url: "https://shop.example.com",
+                icon: "fas fa-shopping-cart",
+                lastUpdated: "30 minutes ago",
+                users: "5.7k",
+                uptime: "99.7%"
+            },
+            {
+                id: 5,
+                name: "API Gateway",
+                description: "Centralized API management system handling all microservices communication.",
+                category: "production",
+                status: "running",
+                statusText: "Live",
+                url: "https://api.example.com",
+                icon: "fas fa-network-wired",
+                lastUpdated: "10 minutes ago",
+                users: "N/A",
+                uptime: "99.9%"
+            },
+            {
+                id: 6,
+                name: "Mobile App Backend",
+                description: "Backend services for iOS and Android mobile applications with push notifications.",
+                category: "production",
+                status: "running",
+                statusText: "Live",
+                url: "https://mobile-api.example.com",
+                icon: "fas fa-mobile-alt",
+                lastUpdated: "1 hour ago",
+                users: "8.3k",
+                uptime: "99.8%"
+            },
+            {
+                id: 7,
+                name: "Document Management",
+                description: "Secure document storage and collaboration platform with version control.",
+                category: "production",
+                status: "maintenance",
+                statusText: "Maintenance",
+                url: "https://docs.example.com",
+                icon: "fas fa-file-alt",
+                lastUpdated: "3 hours ago",
+                users: "2.1k",
+                uptime: "99.5%"
+            },
+            {
+                id: 8,
+                name: "Dev Environment v2.1",
+                description: "Staging environment for testing new features before production deployment.",
+                category: "development",
+                status: "running",
+                statusText: "Testing",
+                url: "https://staging-v21.example.com",
+                icon: "fas fa-code-branch",
+                lastUpdated: "Just now",
+                users: "12",
+                uptime: "98.2%"
+            },
+            {
+                id: 9,
+                name: "QA Testing Suite",
+                description: "Automated testing platform for quality assurance and regression testing.",
+                category: "development",
+                status: "running",
+                statusText: "Active",
+                url: "https://qa.example.com",
+                icon: "fas fa-vial",
+                lastUpdated: "2 days ago",
+                users: "8",
+                uptime: "95.7%"
+            },
+            {
+                id: 10,
+                name: "Data Pipeline Monitor",
+                description: "Monitoring dashboard for ETL processes and data warehouse operations.",
+                category: "production",
+                status: "running",
+                statusText: "Live",
+                url: "https://pipeline.example.com",
+                icon: "fas fa-database",
+                lastUpdated: "5 hours ago",
+                users: "37",
+                uptime: "99.9%"
+            },
+            {
+                id: 11,
+                name: "Dev Environment v2.2",
+                description: "Latest development environment with upcoming features in active development.",
+                category: "development",
+                status: "running",
+                statusText: "Active",
+                url: "https://dev-v22.example.com",
+                icon: "fas fa-laptop-code",
+                lastUpdated: "15 minutes ago",
+                users: "5",
+                uptime: "92.3%"
+            },
+            {
+                id: 12,
+                name: "Marketing Website",
+                description: "Company marketing website with product information and lead generation forms.",
+                category: "production",
+                status: "running",
+                statusText: "Live",
+                url: "https://www.example.com",
+                icon: "fas fa-globe",
+                lastUpdated: "1 week ago",
+                users: "12.5k",
+                uptime: "99.6%"
+            }
+        ];
+
+        // DOM elements
+        const appsContainer = document.getElementById('appsContainer');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const searchInput = document.getElementById('searchInput');
+        const emptyState = document.getElementById('emptyState');
+        const totalAppsElement = document.getElementById('totalApps');
+
+        // Initialize the apps display
+        function renderApps(filter = 'all', searchTerm = '') {
+            appsContainer.innerHTML = '';
+            
+            let filteredApps = apps;
+            
+            // Apply category filter
+            if (filter !== 'all') {
+                if (filter === 'running') {
+                    filteredApps = filteredApps.filter(app => app.status === 'running');
+                } else if (filter === 'maintenance') {
+                    filteredApps = filteredApps.filter(app => app.status === 'maintenance');
+                } else {
+                    filteredApps = filteredApps.filter(app => app.category === filter);
+                }
+            }
+            
+            // Apply search filter
+            if (searchTerm) {
+                const term = searchTerm.toLowerCase();
+                filteredApps = filteredApps.filter(app => 
+                    app.name.toLowerCase().includes(term) || 
+                    app.description.toLowerCase().includes(term) ||
+                    app.category.toLowerCase().includes(term)
+                );
+            }
+            
+            // Update total apps count
+            totalAppsElement.textContent = filteredApps.length;
+            
+            // Show/hide empty state
+            if (filteredApps.length === 0) {
+                emptyState.style.display = 'block';
+            } else {
+                emptyState.style.display = 'none';
+            }
+            
+            // Create app cards
+            filteredApps.forEach(app => {
+                const appCard = document.createElement('div');
+                appCard.className = 'app-card';
+                appCard.setAttribute('data-category', app.category);
+                appCard.setAttribute('data-status', app.status);
+                
+                // Determine status class
+                let statusClass = 'status-running';
+                if (app.status === 'maintenance') statusClass = 'status-warning';
+                
+                appCard.innerHTML = `
+                    <div class="app-header">
+                        <div class="app-icon">
+                            <i class="${app.icon}"></i>
+                        </div>
+                        <div class="app-title">${app.name}</div>
+                    </div>
+                    <div class="app-content">
+                        <p class="app-description">${app.description}</p>
+                        <div class="app-meta">
+                            <div class="app-meta-item">
+                                <i class="far fa-clock"></i>
+                                <span>Updated ${app.lastUpdated}</span>
+                            </div>
+                            <div class="app-meta-item">
+                                <i class="fas fa-users"></i>
+                                <span>${app.users} users</span>
+                            </div>
+                        </div>
+                        <div class="app-meta">
+                            <span class="app-status ${statusClass}">
+                                <i class="fas fa-circle"></i> ${app.statusText}
+                            </span>
+                            <div class="app-meta-item">
+                                <i class="fas fa-signal"></i>
+                                <span>${app.uptime} uptime</span>
+                            </div>
+                        </div>
+                        <a href="${app.url}" target="_blank" class="app-link">
+                            <i class="fas fa-external-link-alt"></i> Open Application
+                        </a>
+                    </div>
+                `;
+                
+                appsContainer.appendChild(appCard);
+            });
+        }
+
+        // Filter button event listeners
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+                // Get filter value
+                const filter = button.getAttribute('data-filter');
+                // Apply filter
+                renderApps(filter, searchInput.value);
+            });
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', () => {
+            const filter = document.querySelector('.filter-btn.active').getAttribute('data-filter');
+            renderApps(filter, searchInput.value);
+        });
+
+        // Initial render
+        renderApps();
+        
+        // Add a subtle loading animation for initial load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.body.style.opacity = 1;
+            }, 100);
+        });
+        
+        // Set initial body opacity to 0 for fade-in effect
+        document.body.style.opacity = 0;
+        document.body.style.transition = 'opacity 0.3s ease-in';
+    </script>
+</body>
+</html>
