@@ -574,15 +574,27 @@
             to { transform: rotate(360deg); }
         }
         
-        /* System Status Banner */
-        .system-status {
-            background: var(--shape-bg-color-alpha);
+        /* Resume Link in Header */
+        .resume-link {
+            background: var(--accent-gradient);
             border: 1px solid var(--shape-border-color);
-            border-radius: var(--box-border-radius);
+            border-radius: var(--button-border-radius);
             padding: 0.75rem 1.5rem;
             display: inline-flex;
             align-items: center;
             gap: 0.75rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--clickable-shadow);
+            animation: blink-resume 2s infinite;
+        }
+        
+        .resume-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+            background: var(--accent-gradient-fill);
         }
         
         /* Gradient Orbs */
@@ -627,6 +639,17 @@
             50% { 
                 background-color: rgba(40, 167, 69, 0.3);
                 box-shadow: 0 0 15px rgba(40, 167, 69, 0.8);
+            }
+        }
+        
+        @keyframes blink-resume {
+            0%, 100% { 
+                box-shadow: 0 0 10px rgba(158, 137, 220, 0.5);
+                transform: scale(1);
+            }
+            50% { 
+                box-shadow: 0 0 20px rgba(158, 137, 220, 0.8);
+                transform: scale(1.02);
             }
         }
         
@@ -680,10 +703,12 @@
                         <p>Access all running applications from a single dashboard</p>
                     </div>
                 </div>
-                <div class="system-status status-running">
-                    <i class="fas fa-circle"></i>
-                    <span>All Systems Operational</span>
-                </div>
+                <a href="https://docs.google.com/document/d/1CNUWmhewtg9X-5PvPga6cW2ySS1g4DhFMn16Gaew4t8/edit?tab=t.0" 
+                   target="_blank" 
+                   class="resume-link">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Resume</span>
+                </a>
             </div>
         </div>
     </header>
@@ -694,14 +719,14 @@
                 <div class="stat-icon">
                     <i class="fas fa-server"></i>
                 </div>
-                <div class="stat-number" id="totalApps">2</div>
+                <div class="stat-number" id="totalApps">3</div>
                 <div class="stat-label">Total Applications</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon">
                     <i class="fas fa-play-circle"></i>
                 </div>
-                <div class="stat-number">2</div>
+                <div class="stat-number">3</div>
                 <div class="stat-label">Running</div>
             </div>
             <div class="stat-card live-visitors-card">
